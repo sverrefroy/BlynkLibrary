@@ -2,10 +2,10 @@ The BlynkLibrary is a simplified Blynk client which supports the most basic part
 
 The BlynkLibrary supports the following parts of Blynk:
   - Connecting and maintaining a connection to the Blynk server.
-  - Writing of virtual pins.
-  - Writing of digital pins.
-  - Transmission of virtual pins.
-  - Transmission of digital pins.
+  - Writing of virtual pins from app/server to Blynk client.
+  - Writing of digital pins from app/server to Blynk client.
+  - Transmission of virtual pins from Blynk client to app/server.
+  - Transmission of digital pins from Blynk client to app/server.
 
 To use this together with the Blynk app you may not use the "Read" setting, but use "Push" and rely on the application using the BlynkLibrary, to push the values.
 
