@@ -1,4 +1,4 @@
-The BlynkLibrary is a simplified Blynk client which supports the most basic parts of Blynk. The BlynkLibrary is a UWA DLL coded in C# and has been tested on Windows 10 (x64) and on Windows 10 IoT Core (ARM, Raspberry Pi 2).
+The BlynkLibrary is a simplified Blynk client which supports the most basic parts of Blynk. The BlynkLibrary is a UWA DLL coded in C# and has been tested on Windows 10 (x64) and on Windows 10 IoT Core (ARM, Raspberry Pi 2). The project may be built on Visual Studio 2017 Community or similar.
 
 The BlynkLibrary supports the following parts of Blynk:
   - Connecting and maintaining a connection to the Blynk server.
@@ -35,3 +35,30 @@ To include it in your project you need add the following code:
   {
       // Handle your received virtual pin here
   }
+  
+  In addition the Blynk client offers the following API:
+        /// <summary>
+        /// This is the Blynk constructor.
+        /// </summary>
+        /// <param name="authentication">The Blynk authentication token.</param>
+        /// <param name="server">Sever connection string url.</param>
+        /// <param name="port">The server port to connect to.</param>
+        public Blynk( string authentication, string server, int port );
+
+        /// <summary>
+        /// This method will try to establish a connection to the Blynk server.
+        /// </summary>
+        /// <returns>'True' if a connection is established, 'False' if not.</returns>
+        public bool Connect()
+        
+        /// <summary>
+        /// This is the virtual pin sender.
+        /// </summary>
+        /// <param name="vp">The virtual pin to send.</param>
+        public void SendVirtualPin( VirtualPin vp );
+        
+        /// <summary>
+        /// This is the digital pin sender.
+        /// </summary>
+        /// <param name="dp">The digital pin to send.</param>
+        public void SendDigitalPin( DigitalPin dp )
