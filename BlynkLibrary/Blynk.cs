@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 //
 //  This file is part of BlynkLibrary
 //
@@ -70,20 +70,14 @@ namespace BlynkLibrary
         {
             get
             {
-                bool result = false;
-
-                if ( tcpClient != null )
-                {
-                    result = tcpClient.Connected;
-                }
-
-                return result;
+                return connected;
             }
         }
 
         #endregion
 
         #region Private definitions
+        private bool connected = false;
         private const int pingInterval = 5; // 5 seconds ping keep alive interval
 
         private TcpClient tcpClient = null;
@@ -94,7 +88,9 @@ namespace BlynkLibrary
         private Stream tcpStream;
         private int    txMessageId;
 
-        private static ThreadPoolTimer pingTimer;
+        private static ThreadPoolTimer blynkTimer;
+
+        byte[] rcBuffer = new byte[ 100 ];
 
         #endregion
 
@@ -122,80 +118,84 @@ namespace BlynkLibrary
             bool result = false;
             int connectTimeoutMilliseconds = 1000;
 
-            tcpClient = new TcpClient();
-
-            tcpClient.NoDelay = true;
-
-            var connectionTask = tcpClient.ConnectAsync( Server, Port ).ContinueWith( task =>
+            try
             {
-                return task.IsFaulted ? null : tcpClient;
-            }, TaskContinuationOptions.ExecuteSynchronously );
+                tcpClient = new TcpClient();
 
-            var timeoutTask = Task.Delay( connectTimeoutMilliseconds ).ContinueWith<TcpClient>( task => null, TaskContinuationOptions.ExecuteSynchronously );
-            var resultTask = Task.WhenAny( connectionTask, timeoutTask ).Unwrap();
+                tcpClient.NoDelay = true;
 
-            resultTask.Wait();
-            var resultTcpClient = resultTask.Result;
-
-            if ( resultTcpClient != null )
-            {
-                tcpStream = tcpClient.GetStream();
-
-                txMessageId = 1;
-
-                List<byte> txMessage = new List<byte>() { 0x02 };
-
-                txMessage.Add( ( byte )( txMessageId >> 8 ) );
-                txMessage.Add( ( byte )( txMessageId ) );
-                txMessage.Add( ( byte )( Authentication.Length >> 8 ) );
-                txMessage.Add( ( byte )( Authentication.Length ) );
-
-                foreach ( char c in Authentication )
+                var connectionTask = tcpClient.ConnectAsync( Server, Port ).ContinueWith( task =>
                 {
-                    txMessage.Add( ( byte )c );
+                    return task.IsFaulted ? null : tcpClient;
+                }, TaskContinuationOptions.ExecuteSynchronously );
+
+                var timeoutTask = Task.Delay( connectTimeoutMilliseconds ).ContinueWith<TcpClient>( task => null, TaskContinuationOptions.ExecuteSynchronously );
+                var resultTask = Task.WhenAny( connectionTask, timeoutTask ).Unwrap();
+
+                resultTask.Wait();
+                var resultTcpClient = resultTask.Result;
+
+                if ( resultTcpClient != null )
+                {
+                    tcpStream = tcpClient.GetStream();
+
+                    txMessageId = 1;
+
+                    List<byte> txMessage = new List<byte>() { 0x02 };
+
+                    txMessage.Add( ( byte )( txMessageId >> 8 ) );
+                    txMessage.Add( ( byte )( txMessageId ) );
+                    txMessage.Add( ( byte )( Authentication.Length >> 8 ) );
+                    txMessage.Add( ( byte )( Authentication.Length ) );
+
+                    foreach ( char c in Authentication )
+                    {
+                        txMessage.Add( ( byte )c );
+                    }
+
+                    tcpStream.Write( txMessage.ToArray(), 0, txMessage.Count );
+
+                    readTcpStream();
+
+                    connected = true;
+
+                    Task.Run( new Action( blynkReceiver ) );
+
+                    result = true;
                 }
-
-                tcpStream.Write( txMessage.ToArray(), 0, txMessage.Count );
-
-                readTcpStream();
-
-                Task.Run( new Action( blynkReceiver ) );
-
-                result = true;
-
-                TimerElapsedHandler myTimerElapsedTimer = new TimerElapsedHandler( timer_Tick );
-
-                pingTimer = ThreadPoolTimer.CreatePeriodicTimer( timer_Tick, new TimeSpan( 0, 0, 5 ) );
-                //pingTimer. += timer_Tick;
-                //pingTimer.Interval = TimeSpan.FromSeconds( pingInterval );
-                //pingTimer.Start();
-
+                else
+                {
+                    // Not connected
+                }
             }
-            else
+            catch ( Exception )
             {
-                // Not connected
             }
+
+            // Create a timer to handle the ping/reconnection period
+            TimerElapsedHandler blynkTimerElapsedTimer = new TimerElapsedHandler( timer_Tick );
+
+            blynkTimer = ThreadPoolTimer.CreatePeriodicTimer( timer_Tick, new TimeSpan( 0, 0, 5 ) );
 
             return result;
         }
 
         /// <summary>
-        /// This is the message response sender.
+        /// This method will disconnect from the Blynk server.
         /// </summary>
-        /// <param name="mId">The Id of the message responding to.</param>
-        public void SendResponse( int mId )
+        public void Disconnect()
         {
-            if ( Connected )
+            try
             {
-                List<byte> txMessage = new List<byte>() { ( byte )Command.RESPONSE };
+                blynkTimer.Cancel();
 
-                txMessage.Add( ( byte )( mId >> 8 ) );
-                txMessage.Add( ( byte )( mId ) );
+                connected = false;
 
-                txMessage.Add( ( byte )( 0 ) );
-                txMessage.Add( ( byte )( Response.OK ) );
-
-                WriteToTcpStream( txMessage );
+                tcpStream.Dispose();
+                tcpClient.Dispose();
+            }
+            catch ( Exception )
+            {
             }
         }
 
@@ -299,6 +299,39 @@ namespace BlynkLibrary
             }
         }
 
+        /// <summary>
+        /// This is the widget set property sender
+        /// </summary>
+        /// <param name="vp">The virtual pin with properties to send.</param>
+        public void SetProperty( VirtualPin vp )
+        {
+            if ( Connected )
+            {
+                txMessageId++;
+                List<byte> txMessage = new List<byte>() { 0x13 };
+
+                txMessage.Add( ( byte )( txMessageId >> 8 ) );
+                txMessage.Add( ( byte )( txMessageId ) );
+
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( vp.Pin.ToString() ) );
+                txMessage.Add( 0x00 );
+
+                foreach ( object o in vp.Property )
+                {
+                    txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( o.ToString().Replace( ',', '.' ) ) );
+                    txMessage.Add( 0x00 );
+                }
+
+                txMessage.RemoveAt( txMessage.Count - 1 );
+
+                int msgLength = txMessage.Count - 3;
+
+                txMessage.Insert( 3, ( byte )( ( msgLength ) >> 8 ) );
+                txMessage.Insert( 4, ( byte )( ( msgLength ) ) );
+
+                WriteToTcpStream( txMessage );
+            }
+        }
         #endregion
 
         #region Private methods
@@ -310,13 +343,18 @@ namespace BlynkLibrary
         /// <param name="timer">The timer which triggered this event</param>
         private void timer_Tick( ThreadPoolTimer timer )
         {
-            if ( tcpClient.Connected )
+            if ( Connected )
             {
                 SendPing();
             }
             else
             {
                 timer.Cancel();
+
+                tcpStream.Dispose();
+                tcpClient.Dispose();
+
+                Connect();
             }
         }
 
@@ -325,7 +363,7 @@ namespace BlynkLibrary
         /// </summary>
         private void blynkReceiver()
         {
-            while ( true )
+            while ( Connected )
             {
                 readTcpStream();
             }
@@ -337,35 +375,43 @@ namespace BlynkLibrary
         /// </summary>
         private void readTcpStream()
         {
-            byte[] rcBuffer = new byte[ 100 ];
+            UInt16 rcMessageId = 0;
 
             int count = tcpStream.Read( rcBuffer, 0, 100 );
 
-            List<byte> rcMessage = new List<Byte>( rcBuffer );
-
-            rcMessage = rcMessage.GetRange( 0, count );
-
-            if ( rcMessage.Count >= 5 )
+            if ( count > 0 )
             {
-                byte[] lengthBytes = rcMessage.GetRange( 3, 2 ).ToArray();
-                lengthBytes = lengthBytes.Reverse().ToArray();
+                List<byte> rcMessage = new List<Byte>( rcBuffer );
 
-                UInt16 messageLength = 0;
+                rcMessage = rcMessage.GetRange( 0, count );
 
-                if ( rcMessage[ 0 ] != ( byte )Command.RESPONSE )
+                while ( rcMessage.Count >= 5 )
                 {
-                    messageLength = BitConverter.ToUInt16( lengthBytes, 0 );
+                    byte[] lengthBytes = rcMessage.GetRange( 3, 2 ).ToArray();
+                    lengthBytes = lengthBytes.Reverse().ToArray();
+
+                    UInt16 messageLength = 0;
+
+                    if ( rcMessage[ 0 ] != ( byte )Command.RESPONSE )
+                    {
+                        messageLength = BitConverter.ToUInt16( lengthBytes, 0 );
+                    }
+
+                    if ( rcMessage.Count >= 5 + messageLength )
+                    {
+                        decodeMessage( rcMessage.GetRange( 0, 5 + messageLength ) );
+
+                        rcMessage.RemoveRange( 0, 5 + messageLength );
+                    }
+                    else
+                    {
+                        rcMessage.Clear();
+                    }
                 }
 
-                if ( rcMessage.Count >= 5 + messageLength )
+                if ( rcMessageId != 0 )
                 {
-                    decodeMessage( rcMessage.GetRange( 0, 5 + messageLength ) );
-
-                    rcMessage.RemoveRange( 0, 5 + messageLength );
-                }
-                else
-                {
-                    rcMessage.Clear();
+                    SendResponse( rcMessageId );
                 }
             }
         }
@@ -374,7 +420,7 @@ namespace BlynkLibrary
         /// This is the Blynk message decoder.
         /// </summary>
         /// <param name="rcMessage">The Blynk message to decode</param>
-        private void decodeMessage( List<byte> rcMessage )
+        private UInt16 decodeMessage( List<byte> rcMessage )
         {
             UInt16 messageLength = ( UInt16 )( rcMessage.Count - 5 );
             Command cmd = ( Command )rcMessage[ 0 ];
@@ -430,6 +476,28 @@ namespace BlynkLibrary
                 default:
                     break;
             }
+
+            return rcMessageId;
+        }
+
+        /// <summary>
+        /// This is the message response sender.
+        /// </summary>
+        /// <param name="mId">The Id of the message responding to.</param>
+        private void SendResponse( int mId )
+        {
+            if ( Connected )
+            {
+                List<byte> txMessage = new List<byte>() { ( byte )Command.RESPONSE };
+
+                txMessage.Add( ( byte )( mId >> 8 ) );
+                txMessage.Add( ( byte )( mId ) );
+
+                txMessage.Add( ( byte )( 0 ) );
+                txMessage.Add( ( byte )( Response.OK ) );
+
+                WriteToTcpStream( txMessage );
+            }
         }
 
         /// <summary>
@@ -438,7 +506,15 @@ namespace BlynkLibrary
         /// <param name="txMessage">The Blynk message to send to tcp.</param>
         private void WriteToTcpStream( List<byte> txMessage )
         {
-            tcpStream.Write( txMessage.ToArray(), 0, txMessage.Count );
+            try
+            {
+                tcpStream.Write( txMessage.ToArray(), 0, txMessage.Count );
+
+            }
+            catch ( IOException )
+            {
+                connected = false;
+            }
         }
 
         #endregion
