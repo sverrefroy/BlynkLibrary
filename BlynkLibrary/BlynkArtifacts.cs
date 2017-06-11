@@ -40,6 +40,11 @@ namespace BlynkLibrary
         /// where the parameter index corrsponds with the index within this list.
         /// </summary>
         public List<object> Value = new List<object>(){ 0 };
+        
+        /// <summary>
+        /// This is the pin properties.
+        /// </summary>
+        public List<object> Property = new List<object>(){ 0 };
     }
 
     /// <summary>
