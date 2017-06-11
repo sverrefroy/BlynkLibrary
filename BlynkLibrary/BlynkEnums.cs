@@ -20,6 +20,7 @@
 //  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
 //  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+using System.Collections.Generic;
 
 namespace BlynkLibrary
 {
@@ -151,4 +152,16 @@ namespace BlynkLibrary
         ENERGY_LIMIT                  = 21,
         FACEBOOK_USER_LOGIN_WITH_PASS = 22
     }
+
+    /// <summary>
+    /// This enum holds definition for widget properties
+    /// </summary>
+    public enum WidgetProperty
+    {
+        Color,
+        Label,
+        Max,
+        Min
+    }
+
 }

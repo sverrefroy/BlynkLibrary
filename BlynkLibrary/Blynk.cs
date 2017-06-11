@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 //  This file is part of BlynkLibrary
 //
@@ -39,6 +39,14 @@ namespace BlynkLibrary
     public class Blynk
     {
         #region Public definitions
+        public static Dictionary<WidgetProperty, string> WProperty = new Dictionary<WidgetProperty, string>()
+        {
+            { WidgetProperty.Color, "color"},
+            { WidgetProperty.Label, "label"},
+            { WidgetProperty.Max,   "max"},
+            { WidgetProperty.Min,   "min"}
+        };
+
         /// <summary>
         /// This handler is triggered when a virtual pin is received from Blynk.
         /// </summary>
@@ -308,26 +316,28 @@ namespace BlynkLibrary
             if ( Connected )
             {
                 txMessageId++;
-                List<byte> txMessage = new List<byte>() { 0x13 };
+                List<byte> txMessage  = new List<byte>();
+                int        startCount = 0;
 
-                txMessage.Add( ( byte )( txMessageId >> 8 ) );
-                txMessage.Add( ( byte )( txMessageId ) );
-
-                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( vp.Pin.ToString() ) );
-                txMessage.Add( 0x00 );
-
-                foreach ( object o in vp.Property )
+                foreach ( Tuple<object, object> p in vp.Property )
                 {
-                    txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( o.ToString().Replace( ',', '.' ) ) );
+                    startCount = txMessage.Count;
+
+                    txMessage.Add( (byte)Command.SET_WIDGET_PROPERTY );
+                    txMessage.Add( ( byte )( txMessageId >> 8 ) );
+                    txMessage.Add( ( byte )( txMessageId ) );
+
+                    txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( vp.Pin.ToString() ) );
                     txMessage.Add( 0x00 );
+                    txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( p.Item1.ToString() ) );
+                    txMessage.Add( 0x00 );
+                    txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( p.Item2.ToString() ) );
+
+                    int msgLength = ( txMessage.Count - startCount ) - 3;
+
+                    txMessage.Insert( startCount + 3, ( byte )( ( msgLength ) >> 8 ) );
+                    txMessage.Insert( startCount + 4, ( byte )( ( msgLength ) ) );
                 }
-
-                txMessage.RemoveAt( txMessage.Count - 1 );
-
-                int msgLength = txMessage.Count - 3;
-
-                txMessage.Insert( 3, ( byte )( ( msgLength ) >> 8 ) );
-                txMessage.Insert( 4, ( byte )( ( msgLength ) ) );
 
                 WriteToTcpStream( txMessage );
             }

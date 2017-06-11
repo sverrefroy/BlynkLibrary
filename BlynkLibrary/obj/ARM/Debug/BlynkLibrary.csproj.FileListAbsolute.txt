@@ -1,0 +1,17 @@
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\bin\ARM\Debug\BlynkLibrary.dll
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\bin\ARM\Debug\BlynkLibrary.pdb
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\bin\ARM\Debug\BlynkLibrary.pri
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\BlynkLibrary.dll
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\BlynkLibrary.pdb
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\priconfig.xml
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\priconfig.xml.intermediate
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\layout.resfiles
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\layout.resfiles.intermediate
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\resources.resfiles
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\resources.resfiles.intermediate
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\pri.resfiles
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\pri.resfiles.intermediate
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\qualifiers.txt
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\qualifiers.txt.intermediate
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\MultipleQualifiersPerDimensionFound.txt
+d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\ARM\Debug\BlynkLibrary.csprojResolveAssemblyReference.cache
