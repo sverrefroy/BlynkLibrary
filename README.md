@@ -8,6 +8,7 @@ The BlynkLibrary supports the following parts of Blynk:
   - Transmission of digital pins from Blynk client to app/server.
   - Read request for virtual pins from Blynk client to app/server. (Thanks to Chernega)
   - Setting widget properties from Blynk client to app/server. (Thanks to Chernega)
+  - Sending virtual and digital pins to a different device through a bridge.
 
 To use this together with the Blynk app you may not use the "Read" setting, but use "Push" and rely on the application using the BlynkLibrary, to push the values.
 
