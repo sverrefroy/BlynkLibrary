@@ -79,4 +79,35 @@ namespace BlynkLibrary
         /// </summary>
         public DigitalPin Data = new DigitalPin();
     }
+
+
+    public class Bridge
+    {
+        Blynk refBlynk;
+        /// <summary>
+        /// This is the pin number.
+        /// </summary>
+        public int  Pin;
+
+        public Bridge( Blynk b, int pin )
+        {
+            refBlynk       = b;
+            Pin            = pin;
+        }
+
+        public void VirtualWrite( VirtualPin vp )
+        {
+            refBlynk.BridgeVirtualWrite( Pin, vp );
+        }
+
+        public void DigitalWrite( DigitalPin dp )
+        {
+            refBlynk.BridgeDigitalWrite( Pin, dp );
+        }
+
+        public void SetAuthToken( string auth)
+        {
+            refBlynk.BridgeSetAuthToken( Pin, auth );
+        }
+    }
 }

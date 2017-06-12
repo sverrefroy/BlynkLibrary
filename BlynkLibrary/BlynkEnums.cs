@@ -161,7 +161,11 @@ namespace BlynkLibrary
         Color,
         Label,
         Max,
-        Min
+        Min,
+        OnLabel,
+        OffLabel,
+        IsEnabled,
+        IsOnPlay
     }
 
 }

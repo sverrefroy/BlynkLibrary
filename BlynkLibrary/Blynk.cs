@@ -41,10 +41,14 @@ namespace BlynkLibrary
         #region Public definitions
         public static Dictionary<WidgetProperty, string> WProperty = new Dictionary<WidgetProperty, string>()
         {
-            { WidgetProperty.Color, "color"},
-            { WidgetProperty.Label, "label"},
-            { WidgetProperty.Max,   "max"},
-            { WidgetProperty.Min,   "min"}
+            { WidgetProperty.Color,     "color"},
+            { WidgetProperty.Label,     "label"},
+            { WidgetProperty.Max,       "max"},
+            { WidgetProperty.Min,       "min"},
+            { WidgetProperty.OnLabel,   "onLabel"},
+            { WidgetProperty.OffLabel,  "offLabel"},
+            { WidgetProperty.IsEnabled, "isEnabled"},
+            { WidgetProperty.IsOnPlay,  "isOnPlay"}
         };
 
         /// <summary>
@@ -236,33 +240,38 @@ namespace BlynkLibrary
             if ( Connected )
             {
                 txMessageId++;
-                List<byte> txMessage = new List<byte>() { 0x14 };
+                List<byte> txMessage = new List<byte>() { (byte)Command.HARDWARE };
 
                 txMessage.Add( ( byte )( txMessageId >> 8 ) );
                 txMessage.Add( ( byte )( txMessageId ) );
-                txMessage.Add( ( byte )'v' );
-                txMessage.Add( ( byte )'w' );
-                txMessage.Add( 0x00 );
-
-                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( vp.Pin.ToString() ) );
-
-                txMessage.Add( 0x00 );
-
-                foreach ( object o in vp.Value )
-                {
-                    txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( o.ToString().Replace( ',', '.' ) ) );
-                    txMessage.Add( 0x00 );
-                }
-
-                txMessage.RemoveAt( txMessage.Count - 1 );
-
-                int msgLength = txMessage.Count - 3;
-
-                txMessage.Insert( 3, ( byte )( ( msgLength ) >> 8 ) );
-                txMessage.Insert( 4, ( byte )( ( msgLength ) ) );
+                PrepareVirtualWrite( vp, txMessage );
 
                 WriteToTcpStream( txMessage );
             }
+        }
+
+        public static void PrepareVirtualWrite( VirtualPin vp, List<byte> txMessage )
+        {
+            txMessage.Add( ( byte )'v' );
+            txMessage.Add( ( byte )'w' );
+            txMessage.Add( 0x00 );
+
+            txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( vp.Pin.ToString() ) );
+
+            txMessage.Add( 0x00 );
+
+            foreach ( object o in vp.Value )
+            {
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( o.ToString().Replace( ',', '.' ) ) );
+                txMessage.Add( 0x00 );
+            }
+
+            txMessage.RemoveAt( txMessage.Count - 1 );
+
+            int msgLength = txMessage.Count - 3;
+
+            txMessage.Insert( 3, ( byte )( ( msgLength ) >> 8 ) );
+            txMessage.Insert( 4, ( byte )( ( msgLength ) ) );
         }
 
         /// <summary>
@@ -274,7 +283,7 @@ namespace BlynkLibrary
             if ( Connected )
             {
                 txMessageId++;
-                List<byte> txMessage = new List<byte>() { 0x14 };
+                List<byte> txMessage = new List<byte>() { ( byte )Command.HARDWARE };
 
                 txMessage.Add( ( byte )( txMessageId >> 8 ) );
                 txMessage.Add( ( byte )( txMessageId ) );
@@ -352,7 +361,7 @@ namespace BlynkLibrary
             if ( Connected )
             {
                 txMessageId++;
-                List<byte> txMessage = new List<byte>() { 0x10 };
+                List<byte> txMessage = new List<byte>() { ( byte )Command.HARDWARE_SYNC };
 
                 txMessage.Add( ( byte )( txMessageId >> 8 ) );
                 txMessage.Add( ( byte )( txMessageId ) );
@@ -370,6 +379,75 @@ namespace BlynkLibrary
                 WriteToTcpStream( txMessage );
             }
         }
+
+        internal void BridgeVirtualWrite( int b, VirtualPin vp )
+        {
+            if ( Connected )
+            {
+                txMessageId++;
+                List<byte> txMessage = new List<byte>() { ( byte )Command.BRIDGE };
+
+                txMessage.Add( ( byte )( txMessageId >> 8 ) );
+                txMessage.Add( ( byte )( txMessageId ) );
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( b.ToString() ) );
+                txMessage.Add( ( byte )( 0x00 ) );
+
+                PrepareVirtualWrite( vp, txMessage );
+
+                WriteToTcpStream( txMessage );
+            }
+        }
+        internal void BridgeDigitalWrite( int b, DigitalPin dp )
+        {
+            if ( Connected )
+            {
+                txMessageId++;
+                List<byte> txMessage = new List<byte>() { ( byte )Command.BRIDGE };
+
+                txMessage.Add( ( byte )( txMessageId >> 8 ) );
+                txMessage.Add( ( byte )( txMessageId ) );
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( b.ToString() ) );
+                txMessage.Add( ( byte )( 0x00 ) );
+                txMessage.Add( ( byte )( 'd' ) );
+                txMessage.Add( ( byte )( 'w' ) );
+                txMessage.Add( ( byte )( 0x00 ) );
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( dp.Pin.ToString() ) );
+                txMessage.Add( ( byte )( 0x00 ) );
+                txMessage.Add( (byte)(dp.Value ? '1' : '0' ) );
+
+                int msgLength = txMessage.Count - 3;
+
+                txMessage.Insert( 3, ( byte )( ( msgLength ) >> 8 ) );
+                txMessage.Insert( 4, ( byte )( ( msgLength ) ) );
+
+                WriteToTcpStream( txMessage );
+            }
+        }
+
+        internal void BridgeSetAuthToken( int p, string auth )
+        {
+            if ( Connected )
+            {
+                txMessageId++;
+                List<byte> txMessage = new List<byte>() { ( byte )Command.BRIDGE };
+
+                txMessage.Add( ( byte )( txMessageId >> 8 ) );
+                txMessage.Add( ( byte )( txMessageId ) );
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( p.ToString() ) );
+                txMessage.Add( ( byte )( 0x00 ) );
+                txMessage.Add( ( byte )( 'i' ) );
+                txMessage.Add( ( byte )( 0x00 ) );
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( auth ) );
+
+                int msgLength = txMessage.Count - 3;
+
+                txMessage.Insert( 3, ( byte )( ( msgLength ) >> 8 ) );
+                txMessage.Insert( 4, ( byte )( ( msgLength ) ) );
+
+                WriteToTcpStream( txMessage );
+            }
+        }
+
         #endregion
 
         #region Private methods
@@ -556,5 +634,7 @@ namespace BlynkLibrary
         }
 
         #endregion
+
+
     }
 }
