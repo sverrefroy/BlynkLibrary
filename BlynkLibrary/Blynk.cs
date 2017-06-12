@@ -342,6 +342,34 @@ namespace BlynkLibrary
                 WriteToTcpStream( txMessage );
             }
         }
+
+        /// <summary>
+        /// Reads a virtual pin.
+        /// </summary>
+        /// <param name="vp">The virtual pin to read.</param>
+        public void ReadVirtualPin( VirtualPin vp )
+        {
+            if ( Connected )
+            {
+                txMessageId++;
+                List<byte> txMessage = new List<byte>() { 0x10 };
+
+                txMessage.Add( ( byte )( txMessageId >> 8 ) );
+                txMessage.Add( ( byte )( txMessageId ) );
+                txMessage.Add( ( byte )'v' );
+                txMessage.Add( ( byte )'r' );
+                txMessage.Add( 0x00 );
+
+                txMessage.AddRange( ASCIIEncoding.ASCII.GetBytes( vp.Pin.ToString() ) );
+
+                int msgLength = txMessage.Count - 3;
+
+                txMessage.Insert( 3, ( byte )( ( msgLength ) >> 8 ) );
+                txMessage.Insert( 4, ( byte )( ( msgLength ) ) );
+
+                WriteToTcpStream( txMessage );
+            }
+        }
         #endregion
 
         #region Private methods
