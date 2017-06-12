@@ -6,6 +6,7 @@ The BlynkLibrary supports the following parts of Blynk:
   - Writing of digital pins from app/server to Blynk client.
   - Transmission of virtual pins from Blynk client to app/server.
   - Transmission of digital pins from Blynk client to app/server.
+  - Setting widget properties from Blynk client to app/server (Thanks to Chernega)
 
 To use this together with the Blynk app you may not use the "Read" setting, but use "Push" and rely on the application using the BlynkLibrary, to push the values.
 
@@ -63,3 +64,10 @@ To include it in your project you need add the following code:
         /// </summary>
         /// <param name="dp">The digital pin to send.</param>
         public void SendDigitalPin( DigitalPin dp )
+        
+        /// <summary>
+        /// This is the widget set property sender
+        /// </summary>
+        /// <param name="vp">The virtual pin with properties to send.</param>
+        public void SetProperty( VirtualPin vp )
+
