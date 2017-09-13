@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "targets": {
     "UAP,Version=v10.0.10586": {
       "Microsoft.CSharp/4.0.1": {
@@ -5000,9 +5000,6 @@
       },
       "runtime.win10-arm-aot.runtime.native.System.IO.Compression/4.0.1": {
         "type": "package",
-        "compile": {
-          "runtimes/win10-arm-aot/lib/netcore50/_._": {}
-        },
         "runtime": {
           "runtimes/win10-arm-aot/lib/netcore50/clrcompression.dll": {}
         }
@@ -9555,9 +9552,6 @@
       },
       "runtime.win10-x64-aot.runtime.native.System.IO.Compression/4.0.1": {
         "type": "package",
-        "compile": {
-          "runtimes/win10-x64-aot/lib/netcore50/_._": {}
-        },
         "runtime": {
           "runtimes/win10-x64-aot/lib/netcore50/clrcompression.dll": {}
         }
@@ -14116,9 +14110,6 @@
       },
       "runtime.win10-x86-aot.runtime.native.System.IO.Compression/4.0.1": {
         "type": "package",
-        "compile": {
-          "runtimes/win10-x86-aot/lib/netcore50/_._": {}
-        },
         "runtime": {
           "runtimes/win10-x86-aot/lib/netcore50/clrcompression.dll": {}
         }
@@ -15918,7 +15909,7 @@
       ]
     },
     "Microsoft.NETCore.Platforms/1.0.2": {
-      "sha512": "fRHBvQs9Z/ZSUAqaSotK1UPol/lwybTgdeTXR4eVw3rVDgzUnWGTUsK0A418oR7NrimNL1TQu/IM0RDa26s0qg==",
+      "sha512": "HT0NDK8Bw0KG/i9JPJheSypcGqqo+lKN3qmBYTpQof+MA+G+S+Yp6+RCahF7gN3toeJ94lBrYk7mwUCidSvxiQ==",
       "type": "package",
       "path": "microsoft.netcore.platforms/1.0.2",
       "files": [
@@ -22010,19 +22001,34 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Sverre\\.nuget\\packages\\": {}
+    "C:\\Users\\aleks\\.nuget\\packages\\": {},
+    "C:\\Users\\aleks\\.dotnet\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Users\\Sverre\\Documents\\Visual Studio 2017\\Projects\\BlynkLibrary\\BlynkLibrary.csproj",
+      "projectUniqueName": "C:\\Users\\aleks\\Documents\\GitHub\\BlynkLibrary\\BlynkLibrary\\BlynkLibrary.csproj",
       "projectName": "BlynkLibrary",
-      "projectPath": "d:\\Users\\Sverre\\Documents\\Visual Studio 2017\\Projects\\BlynkLibrary\\BlynkLibrary.csproj",
-      "outputPath": "d:\\Users\\Sverre\\Documents\\Visual Studio 2017\\Projects\\BlynkLibrary\\obj\\",
+      "projectPath": "C:\\Users\\aleks\\Documents\\GitHub\\BlynkLibrary\\BlynkLibrary\\BlynkLibrary.csproj",
+      "packagesPath": "C:\\Users\\aleks\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\aleks\\Documents\\GitHub\\BlynkLibrary\\BlynkLibrary\\obj\\",
       "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
+      "fallbackFolders": [
+        "C:\\Users\\aleks\\.dotnet\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\aleks\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
       "originalTargetFrameworks": [
         "uap10.0.10586"
       ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\aleks\\.dotnet\\NuGetFallbackFolder": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
       "frameworks": {
         "uap10.0.10586": {
           "projectReferences": {}
