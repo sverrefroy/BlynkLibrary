@@ -19,12 +19,24 @@ In order to test this library the following requirement must be met:
 With this client it is possible to use the push or pull technology to read sensors or control any kind of software or hardware.
 
 
+
 The BlynkRepeater application is just a UDP server together with a Blynk client. The server listens at a port and if a message of type
 
 id value
 
 is sent (for example, 15 33.2), then the virtual pin id will push the value to a correspoding configured device application. 
 
+1. Start BlynkRepeater with 
 
+dotnet run --project BlynkRepeater\BlynkRepeater.csproj
+
+2. Use Netcat command: 
+
+nc 127.0.0.1 8000 -u
+
+to send message messages like (manually send by pressing enter):
+
+15 1000
+15 101.33
 
 
