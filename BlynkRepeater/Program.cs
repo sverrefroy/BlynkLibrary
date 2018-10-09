@@ -22,8 +22,8 @@ namespace BlynkRepeater
                 var authorized = tcs.Task.Result;
                 if (authorized)
                 {
-                    Console.WriteLine($"Hardware client is authorized with given token");
-
+                    Console.WriteLine("Hardware client is authorized with given token");
+                    Console.WriteLine($"Listen to port {port}");
                     udpServer.OnVirtualPin += (id, value) =>
                     {
                         client.WriteVirtualPin(id, value);
@@ -32,7 +32,7 @@ namespace BlynkRepeater
                 }
                 else
                 {
-                    Console.WriteLine($"Cannot authorize client with given token.");
+                    Console.WriteLine("Cannot authorize client with given token.");
                 }
                 Console.ReadKey();
                 client.Disconnect();
