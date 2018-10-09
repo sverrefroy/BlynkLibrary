@@ -1,0 +1,3 @@
+C:\Users\ander\source\repos\andersfrisk77\BlynkMinimalLibrary\Blynker\obj\Debug\netstandard2.0\BlynkMinimalLibrary.csproj.CoreCompileInputs.cache
+C:\Users\ander\source\repos\andersfrisk77\BlynkMinimalLibrary\Blynker\obj\Debug\netstandard2.0\BlynkMinimalLibrary.AssemblyInfoInputs.cache
+C:\Users\ander\source\repos\andersfrisk77\BlynkMinimalLibrary\Blynker\obj\Debug\netstandard2.0\BlynkMinimalLibrary.AssemblyInfo.cs
