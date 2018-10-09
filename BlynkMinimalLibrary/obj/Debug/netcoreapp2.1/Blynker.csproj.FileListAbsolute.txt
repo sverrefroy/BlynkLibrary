@@ -1,4 +1,0 @@
-C:\Users\ander\source\repos\andersfrisk77\BlynkMinimalLibrary\Blynker\obj\Debug\netcoreapp2.1\Blynker.csprojAssemblyReference.cache
-C:\Users\ander\source\repos\andersfrisk77\BlynkMinimalLibrary\Blynker\obj\Debug\netcoreapp2.1\Blynker.csproj.CoreCompileInputs.cache
-C:\Users\ander\source\repos\andersfrisk77\BlynkMinimalLibrary\Blynker\obj\Debug\netcoreapp2.1\Blynker.AssemblyInfoInputs.cache
-C:\Users\ander\source\repos\andersfrisk77\BlynkMinimalLibrary\Blynker\obj\Debug\netcoreapp2.1\Blynker.AssemblyInfo.cs
