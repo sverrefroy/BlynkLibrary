@@ -1,0 +1,7 @@
+Hardware client is authorized with given token
+Listen to port 8000
+
+Unhandled Exception: System.InvalidOperationException: Cannot read keys when either application does not have a console or when console input has been redirected. Try Console.Read.
+   at System.ConsolePal.ReadKey(Boolean intercept)
+   at System.Console.ReadKey()
+   at BlynkRepeater.Program.Main(String[] args) in /home/pi/blynkTools/BlynkMinimalLibrary/BlynkRepeater/Program.cs:line 37
