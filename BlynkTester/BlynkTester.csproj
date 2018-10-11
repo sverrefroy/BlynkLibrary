@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PowerArgs" Version="3.5.0" />
     <ProjectReference Include="..\BlynkMinimalLibrary\BlynkMinimalLibrary.csproj" />
   </ItemGroup>
 
