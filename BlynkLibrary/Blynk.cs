@@ -481,7 +481,13 @@ namespace BlynkLibrary
         {
             while ( Connected )
             {
-                readTcpStream();
+                try {
+                    readTcpStream();
+                }
+                catch
+                {
+                    connected = false;
+                }
             }
         }
 
@@ -551,6 +557,7 @@ namespace BlynkLibrary
                 case Command.RESPONSE:
                     break;
 
+                case Command.BRIDGE:
                 case Command.HARDWARE:
                     var elements = System.Text.Encoding.ASCII.GetString( rcMessage.GetRange( 5, messageLength ).ToArray() ).Split( ( char )0x00 );
 
