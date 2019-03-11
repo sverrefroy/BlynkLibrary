@@ -15,3 +15,21 @@ d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\Debug\qua
 d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\Debug\qualifiers.txt.intermediate
 d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\Debug\MultipleQualifiersPerDimensionFound.txt
 d:\Users\Sverre\Documents\Visual Studio 2017\Projects\BlynkLibrary\obj\Debug\BlynkLibrary.csprojResolveAssemblyReference.cache
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\bin\Debug\BlynkLibrary.dll
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\bin\Debug\BlynkLibrary.pdb
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\bin\Debug\BlynkLibrary.pri
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\BlynkLibrary.csprojResolveAssemblyReference.cache
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\BlynkLibrary.csproj.CoreCompileInputs.cache
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\BlynkLibrary.dll
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\BlynkLibrary.pdb
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\priconfig.xml
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\priconfig.xml.intermediate
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\layout.resfiles
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\layout.resfiles.intermediate
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\resources.resfiles
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\resources.resfiles.intermediate
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\pri.resfiles
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\pri.resfiles.intermediate
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\qualifiers.txt
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\qualifiers.txt.intermediate
+C:\Users\aleks\Documents\GitHub\BlynkLibrary\BlynkLibrary\obj\Debug\MultipleQualifiersPerDimensionFound.txt

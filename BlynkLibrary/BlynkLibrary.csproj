@@ -106,10 +106,16 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Blynk.cs" />
+    <Compile Include="..\BlynkLibrary.Standard\Blynk.cs">
+      <Link>Blynk.cs</Link>
+    </Compile>
+    <Compile Include="..\BlynkLibrary.Standard\BlynkArtifacts.cs">
+      <Link>BlynkArtifacts.cs</Link>
+    </Compile>
+    <Compile Include="..\BlynkLibrary.Standard\BlynkEnums.cs">
+      <Link>BlynkEnums.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BlynkEnums.cs" />
-    <Compile Include="BlynkArtifacts.cs" />
     <EmbeddedResource Include="Properties\BlynkLibrary.rd.xml" />
   </ItemGroup>
   <ItemGroup>
