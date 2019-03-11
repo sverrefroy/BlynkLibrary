@@ -481,7 +481,13 @@ namespace BlynkLibrary
         {
             while ( Connected )
             {
-                readTcpStream();
+                try {
+                    readTcpStream();
+                }
+                catch
+                {
+                    connected = false;
+                }
             }
         }
 
